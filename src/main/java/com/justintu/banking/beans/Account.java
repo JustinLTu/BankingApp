@@ -36,7 +36,7 @@ public class Account {
 	 */
 	private int status;
 	private long funds;
-	private LinkedList<Customer> users;
+	private LinkedList<Customer> users = new LinkedList<Customer>();;
 	
 	
 	/**
@@ -46,7 +46,23 @@ public class Account {
 	public Account() {
 		status = PENDING;
 		funds = 0;
-		users = new LinkedList<Customer>();
+	}
+	
+	/**
+	 * Constructor for account which takes in an initial amount of funds. 
+	 * If this is called with a negative 
+	 * amount of funds, then an IllegalArgumentException is thrown.
+	 * @throws IllegalArgumentException If funds is a negative amount
+	 * @param funds Initial amount of funds for this account
+	 * @param customer Customer to be attache to this account
+	 */
+	public Account(long funds) throws IllegalArgumentException {
+		if(funds > -1) {
+			this.funds = funds;
+			status = PENDING;
+		} else {
+			throw new IllegalArgumentException("Cannot initialize account with negative values. Was given " + funds);
+		}
 	}
 	
 	/**
@@ -61,7 +77,6 @@ public class Account {
 		if(funds > -1) {
 			this.funds = funds;
 			status = PENDING;
-			users = new LinkedList<Customer>();
 			users.add(customer);
 		} else {
 			throw new IllegalArgumentException("Cannot initialize account with negative values. Was given " + funds);
@@ -107,14 +122,22 @@ public class Account {
 	}
 
 	/**
-	 * Attempts to withdraw the given amount of funds from this account.
-	 * It will return true on successful withdrawal from the account.
-	 * If the amount larger the funds in the account, then nothing is withdrawn
-	 * from the account and the method returns false.
+	 * Attempts to withdraw the given amount of money from this Account.
+	 * It will return true on a successful withdrawal from the Account.
+	 * It will return false if amount is greater than the funds in this Account.
+	 * If the amount is a negative value, then the method throws an 
+	 * IllegalArgumentException.
+	 * If the amount is greater than the total funds in the account, then
+	 * nothing is withdrawn from the account and the method returns false.
+	 * 
 	 * @param amount how much money to withdraw from this account
-	 * @return true if the amount is successfully withdrawn, false otherwise.
+	 * @throws IllegalArgumentException Thrown if amount is negative
+	 * @return true if the amount is successfully withdrawn, false if amount
+	 * 			exceeds the funds in this Account
+	 * .
 	 */
 	public boolean withdraw(long amount) {
+		if(amount < 0) {throw new IllegalArgumentException("Must withdraw a positive amount. Gave " + amount);}
 		if(amount <= funds) {
 			funds -= amount;
 			return true;
@@ -123,8 +146,33 @@ public class Account {
 	}
 	
 	/**
+	 * Attempts to deposit the given amount of money into the Account. If the
+	 * given amount is negative, then the method throws an IllegalArgumentException.
+	 * 
+	 * @param amount The amount of money to deposit
+	 * @throws IllegalArgumentException Thrown if amount is negative
+	 */
+	public void deposit(long amount) {
+		if(amount < 0) {throw new IllegalArgumentException("Must deposit a positive amount. Gave " + amount);}
+		funds += amount;
+	}
+	
+	/**
+	 * Transfers money from this account in an other Account. Returns
+	 * false if this account cannot transfer the funds. Returns true 
+	 * upon a successful funds transfer. Throws an 
+	 * @param amount
+	 * @param other
+	 * @return
+	 */
+	public boolean transfer(long amount, Account other) {
+		
+		return false;
+	}
+	
+	/**
 	 * Attempts to adds Customer to this account. If the account already
-	 * has the given Customer on this account, then that customer is not added
+	 * has the given Customer under it, then that customer is not added
 	 * and the method returns false.
 	 * @param c Customer that the method attempts to add
 	 * @return true if the Customer is added, false otherwise
